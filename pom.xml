@@ -10,6 +10,5 @@
     <modules>
         <module>jbebt-client</module>
         <module>jbebt-ejb</module>
-        <module>jbebt-common</module>
     </modules>
 </project>

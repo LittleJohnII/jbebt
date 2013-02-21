@@ -4,7 +4,9 @@
  */
 package org.jboss.test.jbebt.client;
 
+import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Set;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -46,19 +48,16 @@ public class Client {
         final RemoteSFSB sfb = lookupRemoteSFSB();
         System.out.println("obtained a remote stateful bean for invocation");
         
-        Byte[] data = sfb.getData();
+        byte[] data = sfb.getData();
 		System.out.println(data[0] + data[1] + data[2]);
-		
 		data[0] = 1; data[1] = 2; data[2] = 3;
+		int copied = sfb.setData(data);
 		data = sfb.getData();
-		
-		System.out.println(data[0] + data[1] + data[2]);
+		System.out.println(data[0] + data[1] + data[2] + ", copied: " + copied);
 		
 		System.out.println(sfb.getCounter());
 		System.out.println(sfb.incrementAndGetCounter());
-		
 		sfb.setCounter(200l);
-		
 		System.out.println(sfb.getCounter());
 		
 	}
@@ -66,21 +65,24 @@ public class Client {
 	private static RemoteSLSB lookupRemoteSLSB() throws NamingException {
 		
 		final Hashtable jndiProperties = new Hashtable();
-		jndiProperties.put("jboss.naming.client.ejb.context", true);
 		jndiProperties.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
 		final Context context = new InitialContext(jndiProperties);
 		
-		final String appName = "";
-		final String moduleName = Variables.moduleName;
-		final String distinctName = "";
-		final String beanName = RemoteSLSBImpl.class.getSimpleName();
-		final String viewClassName = RemoteSLSB.class.getName();
+		// final String appName = "";
+		// final String moduleName = Variables.moduleName;
+		// final String distinctName = "";
+		// final String beanName = RemoteSLSBImpl.class.getSimpleName();
+		// final String viewClassName = RemoteSLSB.class.getName();
 		
-		System.out.println("ejb:" + appName + "/" + moduleName
-				+ "/" + distinctName + "/" + beanName + "!" + viewClassName);
+		// System.out.println("ejb:" + appName + "/" + moduleName
+		// 		+ "/" + distinctName + "/" + beanName + "!" + viewClassName);
 		
-		return (RemoteSLSB) context.lookup("ejb:" + appName + "/" + moduleName
-				+ distinctName + "/" + beanName + "!" + viewClassName);
+		// return (RemoteSLSB) context.lookup("ejb:" + appName + "/" + moduleName
+		// 		+ distinctName + "/" + beanName + "!" + viewClassName);
+		
+		String ejbID = "ejb:/jbebt-ejb/RemoteSLSBImpl!" + RemoteSLSB.class.getName();
+		
+		return (RemoteSLSB) context.lookup(ejbID);
 		
 	}
 	
@@ -90,17 +92,21 @@ public class Client {
 		jndiProperties.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
 		final Context context = new InitialContext(jndiProperties);
         
-		final String appName = "";
-        final String moduleName = Variables.moduleName;
-        final String distinctName = "";
-        final String beanName = RemoteSFSBImpl.class.getSimpleName();
-		final String viewClassName = RemoteSFSB.class.getName();
+		// final String appName = "";
+        // final String moduleName = Variables.moduleName;
+        // final String distinctName = "";
+        // final String beanName = RemoteSFSBImpl.class.getSimpleName();
+		// final String viewClassName = RemoteSFSB.class.getName();
 		
-		System.out.println("ejb:" + appName + "/" + moduleName
-				+ "/" + distinctName + "/" + beanName + "!" + viewClassName + "?stateful");
+		// System.out.println("ejb:" + appName + "/" + moduleName
+		// 		+ "/" + distinctName + "/" + beanName + "!" + viewClassName + "?stateful");
         
-		return (RemoteSFSB) context.lookup("ejb:" + appName + "/" + moduleName
-				+ "/" + distinctName + "/" + beanName + "!" + viewClassName + "?stateful");
+		// return (RemoteSFSB) context.lookup("ejb:" + appName + "/" + moduleName
+		// 		+ "/" + distinctName + "/" + beanName + "!" + viewClassName + "?stateful");
+		
+		String ejbID = "ejb:/jbebt-ejb/RemoteSFSBImpl!" + RemoteSFSB.class.getName() + "?stateful";
+		
+		return (RemoteSFSB) context.lookup(ejbID);
 		
 	}
 	

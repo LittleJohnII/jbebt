@@ -9,7 +9,7 @@ import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
-import org.jboss.ejb3.annotation.Clustered;
+import org.jboss.annotation.ejb.Clustered;
 
 /**
  * Remote stateless session bean. Encapsulates stateless session bean from jbebt-common.

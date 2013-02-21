@@ -12,6 +12,6 @@ import org.jboss.test.jbebt.ejb.RemoteSFSBImpl;
  */
 public class Variables {
 	
-	public static final String moduleName = "jbebt-ejb-1.0.0-SNAPSHOT";
+	public static final String moduleName = "jbebt-ejb";
 	
 }

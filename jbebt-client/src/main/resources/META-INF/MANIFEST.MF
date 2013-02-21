@@ -1,4 +1,0 @@
-Manifest-Version: 1.0
-ImplementationVersion: 1.0.0-SNAPSHOT
-Main-Class: com.simontuffs.onejar.Boot
-Class-Path: ./ ../ lib/

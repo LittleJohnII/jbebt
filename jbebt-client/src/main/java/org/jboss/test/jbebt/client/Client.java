@@ -4,16 +4,11 @@
  */
 package org.jboss.test.jbebt.client;
 
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Set;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import org.jboss.test.jbebt.ejb.RemoteSFSB;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 import org.jboss.test.jbebt.ejb.RemoteSFSBImpl;
-import org.jboss.test.jbebt.ejb.RemoteSLSB;
-import org.jboss.test.jbebt.ejb.RemoteSLSBImpl;
 
 /**
  * Standalone client for remote invocations.
@@ -21,93 +16,107 @@ import org.jboss.test.jbebt.ejb.RemoteSLSBImpl;
  * @author rjanik
  */
 public class Client {
+	
+	// to execute run: mvn exec:exec -Dexec.executable="java" -Dexec.args="-classpath %classpath org.jboss.test.jbebt.client.Client stateless repeat=20"
+	// or some other combination of arguments that you desire
+	
+	private final static Logger LOG = Logger.getLogger(RemoteSFSBImpl.class.getName());
+	
+	private static boolean contest = false;
+	private static boolean stateless = false;
+	private static boolean stateful = false;
+	private static boolean failover = false;
 
 	public static void main(String[] args) throws Exception {
+		
+		// LOG.setLevel(Level.ALL);
+		// ConsoleHandler handler = new ConsoleHandler();
+		// handler.setLevel(Level.ALL);
+		// handler.setFormatter(new SimpleFormatter());
+		// LOG.addHandler(handler);
+		
+		LOG.info("Starting client...");
+		
+		// what we will do depends on the arguments we receive
+		for (String s : args) {
+			if (s.toLowerCase().equals(Variables.CONTEST_OPTION)) {
+				LOG.info("Setting contest option to true");
+				contest = true;
+			} else if (s.toLowerCase().equals(Variables.STATELESS_OPTION)) {
+				LOG.info("Setting stateless option to true");
+				stateless = true;
+			} else if (s.toLowerCase().equals(Variables.STATEFUL_OPTION)) {
+				LOG.info("Setting stateful option to true");
+				stateful = true;
+			} else if (s.toLowerCase().equals(Variables.FAILOVER_OPTION)) {
+				LOG.info("Setting failover option to true");
+				failover = true;
+			} else if (s.toLowerCase().startsWith(Variables.REPEAT_OPTION)) {
+				
+				// setting repeat
+				
+				String[] splitS = s.split("=");
+				if (splitS.length < 2) {
+					LOG.log(Level.INFO, "Wrong value for: {0}", s);
+					System.err.println("Wrong value for: " + s);
+					return;
+				}
+				
+				try {
+					Variables.repeat = Integer.parseInt(splitS[1]);
+				} catch (NumberFormatException ex) {
+					LOG.log(Level.INFO, "Wrong value for: {0}", s);
+					System.err.println("Wrong value for: " + s);
+					return;
+				}
+				
+			} else if (s.toLowerCase().startsWith(Variables.SLEEP_TIME_OPTION)) {
+				
+				// setting sleep time
+				
+				String[] splitS = s.split("=");
+				if (splitS.length < 2) {
+					LOG.log(Level.INFO, "Wrong value for: {0}", s);
+					System.err.println("Wrong value for: " + s);
+					return;
+				}
+				
+				try {
+					long sleepTime = Long.parseLong(splitS[1]);
+					if (sleepTime < 0) {
+						throw new NumberFormatException();
+					}
+					Variables.sleepTime = sleepTime;
+				} catch (NumberFormatException ex) {
+					LOG.log(Level.INFO, "Wrong value for: {0}", s);
+					System.err.println("Wrong value for: " + s);
+					return;
+				}
+				
+			} else {
+				LOG.log(Level.INFO, "Unknown parameter: {0}", s);
+				System.err.println("Unknown parameter: " + s);
+				return;
+			}
+		}
+		
+		if (contest) {
+			LOG.info("Starting contest...");
+			LOG.info("Calling invokeStatefulRepeatedly...");
+			Util.invokeStatefulRepeatedly();
+			LOG.info("Calling invokeStatelessRepeatedly...");
+			Util.invokeStatelessRepeatedly();
+		} else if (stateful) {
+			LOG.info("Calling invokeStatefulRepeatedly...");
+			Util.invokeStatefulRepeatedly();
+		} else if (stateless) {
+			LOG.info("Calling invokeStatelessRepeatedly...");
+			Util.invokeStatelessRepeatedly();
+		} else if (failover) {
+			LOG.info("Calling testStatefulFailover...");
+			Util.testStatefulFailover();
+		}
 
-		invokeStatelessBean();
-		
-		invokeStatefulBean();
-
-	}
-	
-	private static void invokeStatelessBean() throws NamingException {
-		
-		final RemoteSLSB slb = lookupRemoteSLSB();
-        System.out.println("obtained a remote stateless bean for invocation");
-
-		String message = slb.getMessage();
-		System.out.println("message: " + message);
-
-		String node = slb.getNodeName();
-		System.out.println("node: " + node);
-        
-	}
-	
-	private static void invokeStatefulBean() throws NamingException {
-		
-        final RemoteSFSB sfb = lookupRemoteSFSB();
-        System.out.println("obtained a remote stateful bean for invocation");
-        
-        byte[] data = sfb.getData();
-		System.out.println(data[0] + data[1] + data[2]);
-		data[0] = 1; data[1] = 2; data[2] = 3;
-		int copied = sfb.setData(data);
-		data = sfb.getData();
-		System.out.println(data[0] + data[1] + data[2] + ", copied: " + copied);
-		
-		System.out.println(sfb.getCounter());
-		System.out.println(sfb.incrementAndGetCounter());
-		sfb.setCounter(200l);
-		System.out.println(sfb.getCounter());
-		
-	}
-	
-	private static RemoteSLSB lookupRemoteSLSB() throws NamingException {
-		
-		final Hashtable jndiProperties = new Hashtable();
-		jndiProperties.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
-		final Context context = new InitialContext(jndiProperties);
-		
-		// final String appName = "";
-		// final String moduleName = Variables.moduleName;
-		// final String distinctName = "";
-		// final String beanName = RemoteSLSBImpl.class.getSimpleName();
-		// final String viewClassName = RemoteSLSB.class.getName();
-		
-		// System.out.println("ejb:" + appName + "/" + moduleName
-		// 		+ "/" + distinctName + "/" + beanName + "!" + viewClassName);
-		
-		// return (RemoteSLSB) context.lookup("ejb:" + appName + "/" + moduleName
-		// 		+ distinctName + "/" + beanName + "!" + viewClassName);
-		
-		String ejbID = "ejb:/jbebt-ejb/RemoteSLSBImpl!" + RemoteSLSB.class.getName();
-		
-		return (RemoteSLSB) context.lookup(ejbID);
-		
-	}
-	
-	private static RemoteSFSB lookupRemoteSFSB() throws NamingException {
-		
-		final Hashtable jndiProperties = new Hashtable();
-		jndiProperties.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
-		final Context context = new InitialContext(jndiProperties);
-        
-		// final String appName = "";
-        // final String moduleName = Variables.moduleName;
-        // final String distinctName = "";
-        // final String beanName = RemoteSFSBImpl.class.getSimpleName();
-		// final String viewClassName = RemoteSFSB.class.getName();
-		
-		// System.out.println("ejb:" + appName + "/" + moduleName
-		// 		+ "/" + distinctName + "/" + beanName + "!" + viewClassName + "?stateful");
-        
-		// return (RemoteSFSB) context.lookup("ejb:" + appName + "/" + moduleName
-		// 		+ "/" + distinctName + "/" + beanName + "!" + viewClassName + "?stateful");
-		
-		String ejbID = "ejb:/jbebt-ejb/RemoteSFSBImpl!" + RemoteSFSB.class.getName() + "?stateful";
-		
-		return (RemoteSFSB) context.lookup(ejbID);
-		
 	}
 	
 }

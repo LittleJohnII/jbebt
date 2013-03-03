@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.Remove;
 import javax.ejb.Stateful;
-import org.jboss.annotation.ejb.Clustered;
+import org.jboss.ejb3.annotation.Clustered;
 
 /**
  * Implementation of a simple stateful bean.
@@ -35,7 +35,7 @@ public class RemoteSFSBImpl implements RemoteSFSB {
 	
 	@Override
 	public int setData(byte[] data) {
-		int i = 0;
+		int i;
 		for (i = 0; i < DATA_SIZE && i < data.length; i++) {
 			this.data[i] = data[i];
 		}

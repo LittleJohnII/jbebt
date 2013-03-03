@@ -192,6 +192,11 @@
                         <classpath>
                         </classpath>
                         <argument>org.jboss.test.jbebt.client.Client</argument>
+						<!--
+						<commandlineArgs>contest</commandlineArgs>
+						<commandlineArgs>repeat=5000</commandlineArgs>
+						<commandlineArgs>sleeptime=0</commandlineArgs>
+						-->
                     </arguments>
                 </configuration>
             </plugin>

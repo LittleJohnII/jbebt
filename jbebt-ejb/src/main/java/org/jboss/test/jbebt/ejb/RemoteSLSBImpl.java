@@ -9,7 +9,7 @@ import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
-import org.jboss.annotation.ejb.Clustered;
+import org.jboss.ejb3.annotation.Clustered;
 
 /**
  * Remote stateless session bean. Encapsulates stateless session bean from jbebt-common.
@@ -24,13 +24,13 @@ public class RemoteSLSBImpl implements RemoteSLSB {
 
 	@Override
 	public String getMessage() {
-		LOG.log(Level.INFO, "invoking getMessage() on ", RemoteSLSBImpl.class.getName());
+		LOG.log(Level.INFO, "invoking getMessage() on {0}", RemoteSLSBImpl.class.getName());
 		return "Hello World!";
 	}
 
 	@Override
 	public String getNodeName() {
-		LOG.log(Level.INFO, "invoking getNodeName() on ", RemoteSLSBImpl.class.getName());
+		LOG.log(Level.INFO, "invoking getNodeName() on {0}", RemoteSLSBImpl.class.getName());
 		try {
 			String jbossNodeName = System.getProperty("jboss.node.name");
 			return null != jbossNodeName ? jbossNodeName : InetAddress.getLocalHost().getHostName();

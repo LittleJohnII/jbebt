@@ -35,7 +35,7 @@ public class RemoteSLSBImpl implements RemoteSLSB {
 			String jbossNodeName = System.getProperty("jboss.node.name");
 			return null != jbossNodeName ? jbossNodeName : InetAddress.getLocalHost().getHostName();
 		} catch (UnknownHostException ex) {
-			throw new RuntimeException(ex);
+			throw new RuntimeException("Error resolving local hostname", ex);
 		}
 	}
 	

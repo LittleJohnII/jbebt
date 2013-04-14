@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.jboss.test.jbebt.ejb;
 
 import java.net.InetAddress;
@@ -49,7 +45,7 @@ public class RemoteSFSBImpl implements RemoteSFSB {
 			String jbossNodeName = System.getProperty("jboss.node.name");
 			return null != jbossNodeName ? jbossNodeName : InetAddress.getLocalHost().getHostName();
 		} catch (UnknownHostException ex) {
-			throw new RuntimeException(ex);
+			throw new RuntimeException("Error resolving local hostname", ex);
 		}
 	}
 	
@@ -65,8 +61,7 @@ public class RemoteSFSBImpl implements RemoteSFSB {
 	
 	@Override
 	public long incrementAndGetCounter() {
-		this.counter++;
-		return this.counter;
+		return ++this.counter;
 	}
 	
 	@PostConstruct

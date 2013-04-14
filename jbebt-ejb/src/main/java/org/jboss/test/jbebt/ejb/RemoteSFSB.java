@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.jboss.test.jbebt.ejb;
 
 import javax.ejb.Remote;
@@ -25,6 +21,7 @@ public interface RemoteSFSB {
 	 * Set data method. This takes data parameter and copies all of its cells
 	 * into given bean, or if there is less cells in beans data attribute
 	 * (default 1024) it copies that many cells into the beans data attribute.
+	 * Note that other cells will not be modified.
 	 * 
 	 * @param data, which is byte[]
 	 * @return int, the number of cells copied

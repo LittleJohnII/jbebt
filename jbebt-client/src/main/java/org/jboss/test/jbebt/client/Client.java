@@ -17,17 +17,17 @@ public class Client {
 	
 	private final static Logger LOG = Logger.getLogger(RemoteSFSBImpl.class.getName());
 	
-	private static boolean contest = false;
-	private static boolean contestSimultaneous = false;
-	private static boolean contestCreation = false;
-	private static boolean contestCreationSimultaneous = false;
-	private static boolean stateful = false;
-	private static boolean statefulCreation = false;
-	private static boolean stateless = false;
-	private static boolean statelessCreation = false;
-
 	public static void main(String[] args) throws Exception {
-		
+	
+	boolean contest = false;
+	boolean contestSimultaneous = false;
+	boolean contestCreation = false;
+	boolean contestCreationSimultaneous = false;
+	boolean stateful = false;
+	boolean statefulCreation = false;
+	boolean stateless = false;
+	boolean statelessCreation = false;
+
 		spacing();
 		
 		LOG.info("Starting client...");

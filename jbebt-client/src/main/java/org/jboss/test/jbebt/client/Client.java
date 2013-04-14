@@ -200,7 +200,7 @@ public class Client {
 		System.out.println("\tstateless-c \t\tinvokes creation of [repeat] number of stateless beans and measures elapsed time");
 		System.out.println("\tstateful-c  \t\tinvokes creation of [repeat] number of stateful beans and measures elapsed time");
 		System.out.println("\trepeat=x    \t\tdefines how many times will an action be repeated, should be > 0");
-		System.out.println("\tsleeptime=x \t\tdefines how long a delay between two actions should be, in miliseconds, 0 - no delay, should be >= 0");
+		System.out.println("\tsleep=x     \t\tdefines how long a delay between two actions should be, in miliseconds, 0 - no delay, should be >= 0");
 		System.out.println("\tthreads=x   \t\tdefines how many threads will be used to generate the load, to get the number of total actions invoked, multiply [repeat] * [threads] or 2 * [repeat] * [threads] for contest and creation options");
 		System.out.println("\tverbose     \t\tswitches the program into verbose mode - some more output will be generated - good for debug");
 		System.out.println("Note that you should always specify exactly one of the following options: contest, creation, contest-s, creation-s, stateless, statefull, stateless-c, stateful-c");

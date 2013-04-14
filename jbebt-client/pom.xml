@@ -184,7 +184,7 @@
 						<!--
 						<commandlineArgs>contest</commandlineArgs>
 						<commandlineArgs>repeat=5000</commandlineArgs>
-						<commandlineArgs>sleeptime=0</commandlineArgs>
+						<commandlineArgs>sleep=0</commandlineArgs>
 						-->
 					</arguments>
 				</configuration>

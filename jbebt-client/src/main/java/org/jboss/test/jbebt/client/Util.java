@@ -61,13 +61,14 @@ public class Util {
 	public static void invokeStatelessBean(int runNumber) throws NamingException {
 		
 		final RemoteSLSB slb = lookupRemoteSLSB();
+		long threadId = Thread.currentThread().getId();
 		if (Variables.verbose) {
-			System.out.println("Obtained a remote stateless bean for invocation number " + runNumber);
+			System.out.println(threadId + ": Obtained a remote stateless bean for invocation number " + runNumber);
 		}
 
 		String node = slb.getNodeName();
 		if (Variables.verbose) {
-			System.out.println("node: " + node);
+			System.out.println(threadId + ": node: " + node);
 		}
         
 	}
@@ -82,13 +83,14 @@ public class Util {
 	public static void invokeStatefulBean(int runNumber) throws NamingException, InterruptedException {
 		
 		final RemoteSFSB sfb = lookupRemoteSFSB();
+		long threadId = Thread.currentThread().getId();
 		if (Variables.verbose) {
-			System.out.println("Obtained a remote stateful bean for invocation number " + runNumber);
+			System.out.println(threadId + ": Obtained a remote stateful bean for invocation number " + runNumber);
 		}
 
 		String node = sfb.getNodeName();
 		if (Variables.verbose) {
-			System.out.println("node: " + node);
+			System.out.println(threadId + ": node: " + node);
 		}
         
 	}
@@ -103,6 +105,9 @@ public class Util {
 	public static void createStateless() throws NamingException, InterruptedException {
 		
 		int i;
+		long threadId = Thread.currentThread().getId();
+		
+		System.out.println(threadId + ": Starting stateless bean creation...");
 		long time = System.nanoTime();
 
 		for (i = 1; i <= Variables.repeat; i++) {
@@ -111,7 +116,7 @@ public class Util {
 		}
 
 		time = System.nanoTime() - time;
-		System.out.println(Thread.currentThread().getId() + ": Number of stateless invocations: " + (i - 1) + ", elapsed time: " + ((double) time / 1000000000.0) + " seconds.");
+		System.out.println(threadId + ": Number of stateless invocations: " + (i - 1) + ", elapsed time: " + ((double) time / 1000000000.0) + " seconds.");
 	}
 	
 	/**
@@ -124,6 +129,9 @@ public class Util {
 	public static void createStateful() throws NamingException, InterruptedException {
 		
 		int i;
+		long threadId = Thread.currentThread().getId();
+		
+		System.out.println(threadId + ": Starting stateful bean creation...");
 		long time = System.nanoTime();
 
 		for (i = 1; i <= Variables.repeat; i++) {
@@ -132,7 +140,7 @@ public class Util {
 		}
 
 		time = System.nanoTime()  - time;
-		System.out.println(Thread.currentThread().getId() + ": Number of stateful invocations: " + (i - 1) + ", elapsed time: " + ((double) time / 1000000000.0) + " seconds.");
+		System.out.println(threadId + ": Number of stateful invocations: " + (i - 1) + ", elapsed time: " + ((double) time / 1000000000.0) + " seconds.");
 		
 	}
 	
@@ -147,23 +155,22 @@ public class Util {
 	public static void countWithStateless() throws NamingException, InterruptedException {
 		
 		int i;
-		long time = System.nanoTime();
-		
+		long threadId = Thread.currentThread().getId();
 		final RemoteSLSB slb = lookupRemoteSLSB();
-		if (Variables.verbose) {
-			System.out.println(Thread.currentThread().getId() + ": Obtained a remote stateless bean for invocation.");
-		}
 		
+		System.out.println(threadId + ": Obtained a remote stateless bean for invocation.");
+		long time = System.nanoTime();
+
 		for (i = 1; i <= Variables.repeat; i++) {
 			slb.getMessage();
 			if (Variables.verbose) {
-				System.out.println(i);
+				System.out.println(threadId + ": " + i);
 			}
 			Thread.sleep(Variables.sleep);
 		}
 		
 		time = System.nanoTime()  - time;
-		System.out.println(Thread.currentThread().getId() + ": Number of stateless invocations: " + (i - 1) + ", elapsed time: " + ((double) time / 1000000000.0) + " seconds.");
+		System.out.println(threadId + ": Number of stateless invocations: " + (i - 1) + ", elapsed time: " + ((double) time / 1000000000.0) + " seconds.");
 		
 	}
 	
@@ -178,17 +185,17 @@ public class Util {
 	public static void countWithStateful() throws NamingException, InterruptedException {
 		
 		int i;
-		long time = System.nanoTime();
-		
+		long threadId = Thread.currentThread().getId();
 		final RemoteSFSB sfb = lookupRemoteSFSB();
-		if (Variables.verbose) {
-			System.out.println(Thread.currentThread().getId() + ": Obtained a remote stateful bean for invocation.");
-		}
+		
+		System.out.println(threadId + ": Obtained a remote stateful bean for invocation.");
+		long time = System.nanoTime();
+
         
 		sfb.setCounter(0l);
 		for (i = 1; i <= Variables.repeat; i++) {
 			if (Variables.verbose) {
-				System.out.println(sfb.incrementAndGetCounter());
+				System.out.println(threadId + ": " + sfb.incrementAndGetCounter());
 			} else {
 				sfb.incrementAndGetCounter();
 			}
@@ -196,7 +203,7 @@ public class Util {
 		}
 		
 		time = System.nanoTime()  - time;
-		System.out.println(Thread.currentThread().getId() + ": Number of stateful invocations: " + (i - 1) + ", elapsed time: " + ((double) time / 1000000000.0) + " seconds.");
+		System.out.println(threadId + ": Number of stateful invocations: " + (i - 1) + ", elapsed time: " + ((double) time / 1000000000.0) + " seconds.");
 		
 	}
 	

@@ -185,7 +185,11 @@ public class Util {
         
 		sfb.setCounter(0l);
 		for (i = 1; i <= Variables.repeat; i++) {
-			System.out.println(sfb.incrementAndGetCounter());
+			if (Variables.verbose) {
+				System.out.println(sfb.incrementAndGetCounter());
+			} else {
+				sfb.incrementAndGetCounter();
+			}
 			Thread.sleep(Variables.sleep);
 		}
 		

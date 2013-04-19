@@ -156,7 +156,9 @@ public class Util {
 		
 		for (i = 1; i <= Variables.repeat; i++) {
 			slb.getMessage();
-			System.out.println(i);
+			if (Variables.verbose) {
+				System.out.println(i);
+			}
 			Thread.sleep(Variables.sleep);
 		}
 		

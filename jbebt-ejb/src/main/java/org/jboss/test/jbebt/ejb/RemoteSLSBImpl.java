@@ -24,13 +24,13 @@ public class RemoteSLSBImpl implements RemoteSLSB {
 
 	@Override
 	public String getMessage() {
-		LOG.log(Level.INFO, "invoking getMessage() on {0}", RemoteSLSBImpl.class.getName());
+		// LOG.log(Level.INFO, "invoking getMessage() on {0}", RemoteSLSBImpl.class.getName());
 		return "Hello World!";
 	}
 
 	@Override
 	public String getNodeName() {
-		LOG.log(Level.INFO, "invoking getNodeName() on {0}", RemoteSLSBImpl.class.getName());
+		// LOG.log(Level.INFO, "invoking getNodeName() on {0}", RemoteSLSBImpl.class.getName());
 		try {
 			String jbossNodeName = System.getProperty("jboss.node.name");
 			return null != jbossNodeName ? jbossNodeName : InetAddress.getLocalHost().getHostName();

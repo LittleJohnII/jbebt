@@ -25,7 +25,7 @@ public class RemoteSFSBImpl implements RemoteSFSB {
 	
 	@Override
 	public byte[] getData() {
-		LOG.log(Level.INFO, "invoking getData() on {0}", RemoteSFSBImpl.class.getName());
+		// LOG.log(Level.INFO, "invoking getData() on {0}", RemoteSFSBImpl.class.getName());
 		return data;
 	}
 	
@@ -40,7 +40,7 @@ public class RemoteSFSBImpl implements RemoteSFSB {
 
 	@Override
 	public String getNodeName() {
-		LOG.log(Level.INFO, "invoking getNodeName() on {0}", RemoteSFSBImpl.class.getName());
+		// LOG.log(Level.INFO, "invoking getNodeName() on {0}", RemoteSFSBImpl.class.getName());
 		try {
 			String jbossNodeName = System.getProperty("jboss.node.name");
 			return null != jbossNodeName ? jbossNodeName : InetAddress.getLocalHost().getHostName();

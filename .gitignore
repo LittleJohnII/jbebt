@@ -2,3 +2,7 @@
 /jbebt-common/target/
 /jbebt-client/target/
 .idea
+jbebt.iml
+jbebt-ejb.iml
+jbebt-client.iml
+

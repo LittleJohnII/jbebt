@@ -5,56 +5,25 @@
 
 	<groupId>org.jboss.test</groupId>
 	<artifactId>jbebt-client</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>jbebt-client</name>
    
 	<parent>
 		<artifactId>jbebt</artifactId>
 		<groupId>org.jboss.test</groupId>
-		<version>1.0.0-SNAPSHOT</version>
+		<version>1.0.1-SNAPSHOT</version>
 	</parent>
 
 	<properties>
-		<!-- To make building the project platform independent, we specify the source encoding -->
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-		<!-- JBoss dependency versions -->
-		<version.jboss.maven.plugin>7.3.Final</version.jboss.maven.plugin>
-		<version.jboss.as>7.1.1.Final</version.jboss.as>
-		<!-- Alternatively, comment out the above line, and un-comment the 
-			 line below to use version 7.2.0.Alpha1-redhat-4 which is a release certified 
-			 to work with JBoss EAP 6. It requires you have access to the JBoss EAP 6 
-			 maven repository.
-		<version.jboss.as>7.2.0.Alpha1-redhat-4</version.jboss.as> -->
-
-		<version.jboss.spec.javaee.6.0>3.0.2.Final</version.jboss.spec.javaee.6.0>
-		<!-- Alternatively, comment out the above line, and un-comment the 
-			 line below to use version 3.0.2.Final-redhat-1 which is a release certified 
-			 to work with JBoss EAP 6. It requires you have access to the JBoss EAP 6 
-			 maven repository. -->
-		<!-- <version.jboss.spec.javaee.6.0>3.0.2.Final-redhat-1</version.jboss.spec.javaee.6.0> -->
-
 		<!-- other plugin versions -->
-		<version.compiler.plugin>2.3.1</version.compiler.plugin>
 		<version.exec.plugin>1.2.1</version.exec.plugin>
 		<version.war.plugin>2.1.1</version.war.plugin>
-
-		<!-- maven-compiler-plugin -->
-		<maven.compiler.target>1.6</maven.compiler.target>
-		<maven.compiler.source>1.6</maven.compiler.source>
 	</properties>
 
 	<dependencyManagement>
 		<dependencies>
 			<!-- Define the version of JBoss' Java EE 6 APIs we want to use -->
-			<!-- JBoss distributes a complete set of Java EE 6 APIs including
-				 a Bill of Materials (BOM). A BOM specifies the versions of a "stack" (or
-				 a collection) of artifacts. We use this here so that we always get the correct
-				 versions of artifacts. Here we use the jboss-javaee-6.0 stack (you can
-				 read this as the JBoss stack of the Java EE 6 APIs). You can actually
-				 use this stack with any version of JBoss AS that implements Java EE 6, not
-				 just JBoss AS 7! -->
 			<dependency>
 				<groupId>org.jboss.spec</groupId>
 				<artifactId>jboss-javaee-6.0</artifactId>
@@ -74,34 +43,28 @@
 	</dependencyManagement>
 
 	<dependencies>
-
-		<!-- Import the transaction spec API, we use runtime scope because we aren't using any direct
-			 reference to the spec API in our client code -->
+		<!-- Import the transaction spec API -->
 		<dependency>
 			<groupId>org.jboss.spec.javax.transaction</groupId>
 			<artifactId>jboss-transaction-api_1.1_spec</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- Import the EJB 3.1 API, we use runtime scope because we aren't using any direct
-			 reference to EJB spec API in our client code -->
+		<!-- Import the EJB 3.1 API -->
 		<dependency>
 			<groupId>org.jboss.spec.javax.ejb</groupId>
 			<artifactId>jboss-ejb-api_3.1_spec</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- We depend on the EJB remote business interfaces  of this application -->
-
-		<!-- JBoss EJB client API jar. We use runtime scope because the EJB client API
-			 isn't directly used in this example. We just need it in our runtime classpath -->
+		<!-- JBoss EJB client API jar. -->
 		<dependency>
 			<groupId>org.jboss</groupId>
 			<artifactId>jboss-ejb-client</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- client communications with the server use XNIO -->
+		<!-- Client communications with the server use XNIO -->
 		<dependency>
 			<groupId>org.jboss.xnio</groupId>
 			<artifactId>xnio-api</artifactId>
@@ -114,7 +77,7 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- The client needs JBoss remoting to access the server -->
+		<!-- The client needs JBoss Remoting to access the server -->
 		<dependency>
 			<groupId>org.jboss.remoting3</groupId>
 			<artifactId>jboss-remoting</artifactId>
@@ -128,22 +91,25 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- data serialization for invoking remote EJBs -->
+		<!-- Data serialization for invoking remote EJBs -->
 		<dependency>
 			<groupId>org.jboss.marshalling</groupId>
 			<artifactId>jboss-marshalling-river</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+
+        <!-- And the EJB part of our application since we are dependent on it -->
 		<dependency>
 			<groupId>org.jboss.test</groupId>
 			<artifactId>jbebt-ejb</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<version>1.0.1-SNAPSHOT</version>
 			<type>jar</type>
 		</dependency>
 	</dependencies>
 
 	<build>
 		<finalName>${project.artifactId}</finalName>
+
 		<plugins>
 			<!-- Enforce Java 1.6  -->
 			<plugin>
@@ -155,7 +121,7 @@
 				</configuration>
 			</plugin>
 
-			<!-- Add the maven exec plugin to allow us to run a java program via maven -->
+			<!-- Maven exec plugin allows us to run the application easily -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
@@ -171,25 +137,15 @@
 					<executable>java</executable>
 					<workingDirectory>${project.build.directory}/exec-working-directory</workingDirectory>
 					<arguments>
-						<!-- automatically creates the classpath using all project dependencies,
-							 also adding the project build directory -->
 						<argument>-classpath</argument>
 						<classpath>
 						</classpath>
 						<argument>org.jboss.test.jbebt.client.Client</argument>
-						<!--
-							This is another way to define arguments when running this program
-							with mvn:exec exec.
-						-->
-						<!--
-						<commandlineArgs>contest</commandlineArgs>
-						<commandlineArgs>repeat=5000</commandlineArgs>
-						<commandlineArgs>sleep=0</commandlineArgs>
-						-->
 					</arguments>
 				</configuration>
 			</plugin>
-			<!-- build standalone exe jar -->
+
+			<!-- Build standalone executable jar -->
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<configuration>
@@ -201,18 +157,6 @@
 							<mainClass>org.jboss.test.jbebt.client.Client</mainClass>
 						</manifest>
 					</archive>
-				</configuration>
-			</plugin>
-        
-			<!-- The JBoss AS plugin deploys your apps to a local JBoss AS container -->
-			<!-- Disabling it here means that we don't try to deploy this POM! -->
-			<plugin>
-				<groupId>org.jboss.as.plugins</groupId>
-				<artifactId>jboss-as-maven-plugin</artifactId>
-				<version>${version.jboss.maven.plugin}</version>
-				<inherited>true</inherited>
-				<configuration>
-					<skip>true</skip>
 				</configuration>
 			</plugin>
 		</plugins>

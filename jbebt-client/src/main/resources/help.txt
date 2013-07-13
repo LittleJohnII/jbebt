@@ -1,0 +1,18 @@
+For instructions on how to compile and run the application, see README.md.
+
+Here is the list of supported arguments:
+
+contest.........counts to [repeat] with stateful and then stateless beans and measures elapsed time
+creation........invokes creation of [repeat] number of stateful and then stateless beans and measures elapsed time
+contest-s.......simultaneously counts to [repeat] with stateful and stateless beans and measures elapsed time
+creation-s......simultaneously invokes creation of [repeat] number of stateful and stateless beans and measures elapsed time
+stateless.......counts to [repeat] with stateless beans and measures elapsed time, the client performs the counting in this case
+stateful........counts to [repeat] with stateful bean and measures elapsed time, the server performs the counting in this case
+stateless-c.....invokes creation of [repeat] number of stateless beans and measures elapsed time
+stateful-c......invokes creation of [repeat] number of stateful beans and measures elapsed time
+repeat=x........defines how many times will an invocation be performed, should be a positive number
+sleep=x.........sets the delay between invocations, in milliseconds
+threads=x.......sets the number of threads that will generate load, this is effectively doubled for simultaneous contests
+verbose.........switches the program into verbose mode - good for debugging
+
+Note that exactly one type of action to perform has to be specified, or else the application will proceed to print the help page and exit. These are: "contest", "contest-s", "creation", "creation-s", "stateless", "stateless-c", "stateful" and "stateful-c".
